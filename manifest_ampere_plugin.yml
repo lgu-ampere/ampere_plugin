@@ -1,0 +1,39 @@
+name: carbon-footprint-calculation
+description: Calculate Carbon Footprint for Bare Metal Server
+
+initialize:
+  plugins:
+    carbon-footprint:
+      method: CarbonFootprintCalculator
+      path: '/home/altrauser/greensoftwareIF/ampere_plugin/build/index.js'
+      global-config:
+        server_specs:
+          utilization:
+            cpu_usage_percentage: 70
+            memory_usage_percentage: 80
+            storage_usage_percentage: 50
+          usage:
+            hours_per_day: 24
+            days_per_year: 365
+        calculation_factors:
+          power_usage_effectiveness: 1.2
+          electricity_emission_factor: 0.5
+          server_lifetime: 5
+
+tree:
+  children:
+    bare-metal-server:
+      pipeline:
+        - carbon-footprint
+      inputs:
+        name: "Bare Metal Server SMC Altra Max"
+        specs:
+          cores: 128
+          cpu: "Ampere Altra Max 128 core"
+          ram: "256 GB DDR4"
+          storage:
+            capacity: "1 TB"
+            type: "SSD"
+
+output:
+  format: json
